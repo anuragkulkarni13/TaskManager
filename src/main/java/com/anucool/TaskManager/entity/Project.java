@@ -1,9 +1,15 @@
 package com.anucool.TaskManager.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.lang.NonNull;
 
 @Entity
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Project {
 
     @Id
@@ -17,46 +23,4 @@ public class Project {
     @JoinColumn(name = "user_id")
     private User user;
 
-    public Project() {
-    }
-
-    public Project(Long projectId, @NonNull String projectName, User user) {
-        this.projectId = projectId;
-        this.projectName = projectName;
-        this.user = user;
-    }
-
-    public Long getProjectId() {
-        return projectId;
-    }
-
-    public void setProjectId(Long projectId) {
-        this.projectId = projectId;
-    }
-
-    @NonNull
-    public String getProjectName() {
-        return projectName;
-    }
-
-    public void setProjectName(@NonNull String projectName) {
-        this.projectName = projectName;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    @Override
-    public String toString() {
-        return "Project{" +
-                "projectId=" + projectId +
-                ", projectName='" + projectName + '\'' +
-                ", user=" + user +
-                '}';
-    }
 }
