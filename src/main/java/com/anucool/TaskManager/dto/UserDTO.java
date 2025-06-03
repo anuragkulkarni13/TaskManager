@@ -5,13 +5,14 @@ import jakarta.persistence.*;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class UserDTO {
 
     private Long userId;
     private String userName;
-    private List<Project> projects;
+    private List<Project> projects = new ArrayList<>();
 
     public UserDTO() {
     }
