@@ -2,6 +2,7 @@ package com.anucool.TaskManager.service.impl;
 
 import com.anucool.TaskManager.dto.UserDTO;
 import com.anucool.TaskManager.entity.User;
+import com.anucool.TaskManager.exceptions.ResourceNotFoundException;
 import com.anucool.TaskManager.mapper.UserMapper;
 import com.anucool.TaskManager.repository.UserRepository;
 import com.anucool.TaskManager.service.UserService;
@@ -37,24 +38,41 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDTO getUserByName(String userName) {
         User user = userRepository.findByUserName(userName);
-        UserDTO userDTO = userMapper.toDto(user);
-        return userDTO;
+        if(user != null)
+        {
+            UserDTO userDTO = userMapper.toDto(user);
+            return userDTO;
+        }
+        else {
+            throw new ResourceNotFoundException("User with the userName "+userName+" not found.");
+        }
     }
 
     @Override
     public UserDTO updateUser(String userName, UserDTO userDTO) {
         User user = userRepository.findByUserName(userName);
-        user.setUserName(userDTO.getUserName());
-        //Following line is having issues when updating with orphan removals
-//        user.setProjects(userDTO.getProjects());
-        userRepository.save(user);
-        return userMapper.toDto(user);
+        if(user != null)
+        {
+            user.setUserName(userDTO.getUserName());
+            //Following line is having issues when updating with orphan removals
+//          user.setProjects(userDTO.getProjects());
+            userRepository.save(user);
+            return userMapper.toDto(user);
+        } else {
+            throw new ResourceNotFoundException("User with the userName "+userName+" not found. Update request Cancelled");
+        }
     }
 
     @Override
     public int deleteUser(String userName) {
         User user = userRepository.findByUserName(userName);
-        userRepository.delete(user);
-        return 0;
+        if(user != null)
+        {
+            userRepository.delete(user);
+            return 0;
+        }
+        else {
+            throw new ResourceNotFoundException("User with the userName "+userName+" not found. Delete request Cancelled");
+        }
     }
 }
