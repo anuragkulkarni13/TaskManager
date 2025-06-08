@@ -1,5 +1,6 @@
 package com.anucool.TaskManager.controller;
 
+import com.anucool.TaskManager.exceptions.InvalidResourceException;
 import com.anucool.TaskManager.exceptions.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +18,12 @@ public class GlobalExceptionHandler {
     public ResponseEntity<Map<String, Object>> handleNotFound(ResourceNotFoundException ex)
     {
         return buildResponse(ex.getMessage(), HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(InvalidResourceException.class)
+    public ResponseEntity<Map<String, Object>> handleInvalidResource(InvalidResourceException ex)
+    {
+        return buildResponse(ex.getMessage(), HttpStatus.BAD_REQUEST);
     }
 
     private ResponseEntity<Map<String, Object>> buildResponse(String message, HttpStatus httpStatus)

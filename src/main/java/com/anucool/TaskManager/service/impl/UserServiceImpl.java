@@ -2,6 +2,7 @@ package com.anucool.TaskManager.service.impl;
 
 import com.anucool.TaskManager.dto.UserDTO;
 import com.anucool.TaskManager.entity.User;
+import com.anucool.TaskManager.exceptions.InvalidResourceException;
 import com.anucool.TaskManager.exceptions.ResourceNotFoundException;
 import com.anucool.TaskManager.mapper.UserMapper;
 import com.anucool.TaskManager.repository.UserRepository;
@@ -22,10 +23,15 @@ public class UserServiceImpl implements UserService {
     UserMapper userMapper;
 
     @Override
-    public int createUser(UserDTO userDTO) {
+    public UserDTO createUser(UserDTO userDTO) {
+        if(userDTO.getUserName() == null || userDTO.getUserName().trim().isEmpty())
+        {
+            throw new InvalidResourceException("Invalid User. UserName must not be Empty");
+        }
         User user = userMapper.toEntity(userDTO);
-        userRepository.save(user);
-        return 0;
+        User savedUser = userRepository.save(user);
+        UserDTO savedUserDto = userMapper.toDto(savedUser);
+        return savedUserDto;
     }
 
     @Override
