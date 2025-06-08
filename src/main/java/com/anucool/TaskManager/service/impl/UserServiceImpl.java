@@ -7,6 +7,7 @@ import com.anucool.TaskManager.exceptions.ResourceNotFoundException;
 import com.anucool.TaskManager.mapper.UserMapper;
 import com.anucool.TaskManager.repository.UserRepository;
 import com.anucool.TaskManager.service.UserService;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -23,6 +24,7 @@ public class UserServiceImpl implements UserService {
     UserMapper userMapper;
 
     @Override
+    @Transactional
     public UserDTO createUser(UserDTO userDTO) {
         if(userDTO.getUserName() == null || userDTO.getUserName().trim().isEmpty())
         {
@@ -31,10 +33,12 @@ public class UserServiceImpl implements UserService {
         User user = userMapper.toEntity(userDTO);
         User savedUser = userRepository.save(user);
         UserDTO savedUserDto = userMapper.toDto(savedUser);
+
         return savedUserDto;
     }
 
     @Override
+    @Transactional
     public List<UserDTO> getAllUsers() {
         List<User> users = userRepository.findAll();
         List<UserDTO> userDtoList = userMapper.toDtoList(users);
@@ -42,6 +46,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public UserDTO getUserByName(String userName) {
         User user = userRepository.findByUserName(userName);
         if(user != null)
@@ -55,6 +60,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public UserDTO updateUser(String userName, UserDTO userDTO) {
         User user = userRepository.findByUserName(userName);
         if(user != null)
@@ -70,6 +76,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public int deleteUser(String userName) {
         User user = userRepository.findByUserName(userName);
         if(user != null)
